@@ -4,6 +4,7 @@
     <h1><img src="@/assets/Digimon_Logo.webp" alt="Logo" style="width: 500px; height: 200px;"></h1>
 </div>
 
+
 <label >HOLA SOY Ivan</label>
 
   <div class="container">
