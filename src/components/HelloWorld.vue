@@ -1,7 +1,7 @@
 <template>
 
 <div class="container-titulo">
-    <h1><img src="@/assets/Digimon_Logo.webp" alt="Logo" style="width: 500px; height: 200px;"></h1>
+    <h1><img src="@/assets/Digimon_Logo.webp" alt="Logo" style="width: 500px; height: 200px;">Hola</h1>
 </div>
 
   <div class="container">
