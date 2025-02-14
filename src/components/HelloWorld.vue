@@ -4,36 +4,103 @@
     <h1><img src="@/assets/Digimon_Logo.webp" alt="Logo" style="width: 500px; height: 200px;"></h1>
 </div>
 
+<button @click="toogglePage">Siguiente pagina</button>
+
   <div class="container">
     <!-- Contenedor de tarjetas con Grid -->
     <div class="card-container">
       <div v-for="digimon in digimones.content" :key="digimon.name" class="card">
-        <img :src="digimon.image" alt="Imagen de Digimon">
-        <h2><img src="@/assets/digivice.webp" alt="Logo" style="width: 20px; height: 20px;"> {{ digimon.name }}</h2>
-        <!-- <h2><img src="@/assets/fuego.png" alt="Logo" style="width: 20px; height: 20px;">{{ digimon.content.level }}</h2>-->
+
+        <div @click="showDigimon(digimon.id)">
+          <img :src="digimon.image" alt="Imagen de Digimon">
+          <h2><img src="@/assets/digivice.webp" alt="Logo" style="width: 20px; height: 20px;"> {{ digimon.name }}</h2>
+        </div>
+
       </div>
 
     </div>
   </div>
+
+
+<div class="modal-container" v-if="tooggleModal">
+  <div class="modal">
+    <h4>Modal</h4>
+    <label >Nombre: {{ digimonDetail.name }} </label>
+    <button @click="tooggleModal = false">Cerrar</button>
+  </div>
+</div>
+
+
 </template>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <script setup>
 import { ref, onMounted } from 'vue'
 
 const digimones = ref([])
-const pageSize = 50;
-//https://digi-api.com/api/v1/digimon?pageSize=${pageSize};
+const digimonDetail = ref({})
+const pageSize = ref(20)
+const page = ref(0)
+const tooggleModal = ref(false)
 
 // Cargar los datos cuando el componente se monta
 onMounted(() => {
-  fetch(`https://digi-api.com/api/v1/digimon?pageSize=${pageSize}`)
-    .then(response => response.json())
-    .then(data => {
-      console.log(data)
-      digimones.value = data
-    })
-})
+  callDigiApiAllDigimons()
+});
+
+const toogglePage = () => {
+  page.value += 1
+  callDigiApiAllDigimons()
+}
+
+// Ejemplo de funcion asyncrona
+const callDigiApiAllDigimons = async () => {
+  const response = await fetch(`https://digi-api.com/api/v1/digimon?pageSize=${pageSize.value}&page=${page.value}`)
+  const data = await response.json()
+
+  digimones.value = data
+}
+
+
+const callDigiApiOneDigimonDetail = async (id) => {
+  const response = await fetch(`https://digi-api.com/api/v1/digimon/${id}`)
+  const data = await response.json()
+
+  digimonDetail.value = data
+}
+
+const showDigimon = (id) => {
+  tooggleModal.value = true
+  callDigiApiOneDigimonDetail(id)
+}
+ 
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <style>
 /* Estilos generales */
@@ -115,4 +182,29 @@ h4 {
   color: #333;
   margin-top: 10px;
 }
+
+
+.modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  color: #333;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  width: 100%;
+}
+
 </style>
