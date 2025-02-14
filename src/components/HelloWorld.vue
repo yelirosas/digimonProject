@@ -4,13 +4,6 @@
     <h1><img src="@/assets/Digimon_Logo.webp" alt="Logo" style="width: 500px; height: 200px;"></h1>
 </div>
 
-<label>Hola soy Yeli</label>
-
-<label >Te amo Ivan</label>
-
-<label >HOLA SOY Linea Ivan</label>
-<label>Hola soy linea 11</label>
-
   <div class="container">
     <!-- Contenedor de tarjetas con Grid -->
     <div class="card-container">
