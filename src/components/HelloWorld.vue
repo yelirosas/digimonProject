@@ -4,7 +4,6 @@
     <h1><img src="@/assets/Digimon_Logo.webp" alt="Logo" style="width: 500px; height: 200px;"></h1>
 </div>
 
-<button @click="toogglePage">Siguiente pagina</button>
 
   <div class="container">
     <!-- Contenedor de tarjetas con Grid -->
@@ -25,25 +24,39 @@
 <div class="modal-container" v-if="tooggleModal">
   <div class="modal">
     <h4>Modal</h4>
-    <label >Nombre: {{ digimonDetail.name }} </label>
-    <button @click="tooggleModal = false">Cerrar</button>
-  </div>
+
+    <img :src="digimonDetail.images[0].href"  alt="Imagen de Digimon"><br>
+    
+    <div class="modal-info-left modal-text">
+      <label class="sub-text">Nombre:</label><label> {{ digimonDetail.name }} </label><br>
+      <label class="sub-text">Nivel: </label><label>{{ digimonDetail.levels[0].level }} </label><br>
+      <label class="sub-text">Tipo: </label><label>{{ digimonDetail.types[0].type }} </label>
+    </div>
+
+    <div class="modal-info-right modal-text">
+      <label class="sub-text">Skills:</label>
+      <div v-for="digimonOne in digimonDetail.skills">
+        <label style="font-family: sans-serif;"> <ul><li>{{digimonOne.skill }} </li></ul></label>
+        </div>
+
+      </div>
+      <div class="modal-info-under">
+        <button class="styled-button" @click="tooggleModal = false">Cerrar</button>
+      </div>      
+    </div>
 </div>
 
 
+<div class="button-container modal-info-under">
+  <button class="styled-button" @click="togglePage(false)"><img src="@/assets/left.png" alt="Logo" style="width: 20px; height: 20px;">Anterior página</button>
+  <button class="styled-button" @click="togglePage(true)">Siguiente página<img src="@/assets/right.png" alt="Logo" style="width: 20px; height: 20px;"></button>
+</div>
+
+<div class="container2">
+
+</div>
+
 </template>
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -61,10 +74,15 @@ onMounted(() => {
   callDigiApiAllDigimons()
 });
 
-const toogglePage = () => {
-  page.value += 1
-  callDigiApiAllDigimons()
+const togglePage = (increment) => {
+  if (increment) {
+    page.value += 1;
+  } else {
+    page.value -= 1;
+  }
+  callDigiApiAllDigimons();
 }
+
 
 // Ejemplo de funcion asyncrona
 const callDigiApiAllDigimons = async () => {
@@ -73,7 +91,6 @@ const callDigiApiAllDigimons = async () => {
 
   digimones.value = data
 }
-
 
 const callDigiApiOneDigimonDetail = async (id) => {
   const response = await fetch(`https://digi-api.com/api/v1/digimon/${id}`)
@@ -88,17 +105,6 @@ const showDigimon = (id) => {
 }
  
 </script>
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -127,6 +133,13 @@ body {
   padding: 20px 40px; /* 20px arriba/abajo, 40px izquierda/derecha */
   box-sizing: border-box; /* Evita que el padding afecte el tamaño */
   background:  #0f3175
+}
+
+/* Contenedor principal */
+.container-modal {
+
+  background:  #f8cf1760
+
 }
 
 
@@ -195,6 +208,8 @@ h4 {
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size:medium;
+
 }
 
 .modal {
@@ -205,6 +220,76 @@ h4 {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   max-width: 600px;
   width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
 }
+
+    /* Contenedor para centrar los botones */
+    .button-container {
+      width: 100%;             /* Asegura que el contenedor ocupa el 100% del ancho */
+      display: flex;
+      justify-content: center; /* Centra los elementos horizontalmente */
+      gap: 20px;               /* Espacio entre botones */
+      margin-top: 50px;        /* Espacio superior */
+    }
+
+    /* Estilo general para los botones */
+    .styled-button {
+      background-color: #3498db; /* Color de fondo */
+      border: none;
+      border-radius: 5px;        /* Bordes redondeados */
+      color: #fff;               /* Color del texto */
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    /* Efecto al pasar el cursor */
+    .styled-button:hover {
+      background-color: #2980b9;
+      transform: translateY(-2px);
+    }
+
+    /* Efecto al hacer clic */
+    .styled-button:active {
+      transform: translateY(0);
+    }
+
+    .modal-info-left{
+      height: auto;
+      width: 230px;
+      float: left;
+     /* background-color: #f00c0c;*/
+    }
+
+    .modal-text{
+      text-align: left;
+      font-size: 110%;
+      font-family: "Arial";
+      line-height: 200%;
+    }
+
+    .modal-info-right{
+      padding-bottom: 20px;
+      height:auto;
+      width: 300px;
+      float: right;
+     /* background-color: #2980b9;*/
+    }
+
+    .modal-info-under{
+      height:80px;
+      width: 100%; 
+      float:inline-end;
+      align-items: center;
+     /* background-color: #2980b9;*/
+    }
+
+    .sub-text{
+      font-weight: bold;
+    }
+
+
 
 </style>
