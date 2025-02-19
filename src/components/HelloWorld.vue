@@ -4,6 +4,8 @@
     <h1><img src="@/assets/Digimon_Logo.webp" alt="Logo" style="width: 500px; height: 200px;"></h1>
 </div>
 
+<input type="search" v-model="nameDigimonSearch" placeholder="Buscar Digimon por nombre" >
+<button @click="callDigiApiOneDigimonDetailByName(nameDigimonSearch)">Buscar</button>
 
   <div class="container">
     <!-- Contenedor de tarjetas con Grid -->
@@ -26,11 +28,25 @@
     <h4>Modal</h4>
 
     <img :src="digimonDetail.images[0].href"  alt="Imagen de Digimon"><br>
-    
+
     <div class="modal-info-left modal-text">
       <label class="sub-text">Nombre:</label><label> {{ digimonDetail.name }} </label><br>
-      <label class="sub-text">Nivel: </label><label>{{ digimonDetail.levels[0]?.level }} </label><br>
-      <label class="sub-text">Tipo: </label><label>{{ digimonDetail.types[0]?.type }} </label>
+      <!-- <label class="sub-text">Nivel: </label><label>{{ digimonDetail.levels.length > 0 ? digimonDetail.levels[0].level : 'N/A' }} </label><br> -->
+
+      <label class="sub-text">Nivel: </label>
+
+      <div v-for="digimonOne in digimonDetail.levels">
+        <label>{{digimonOne.level }} </label>
+      </div>
+
+      <!-- <label>{{digimonDetail.levels.length == 0 ? 'N/A' : '' }} </label> <br>  -->
+
+      <div v-if="digimonDetail.levels.length == 0">
+        'N/A'
+      </div>
+
+
+      <label class="sub-text">Tipo: </label><label>{{ digimonDetail.types[0].type }} </label>
     </div>
 
     <div class="modal-info-right modal-text">
@@ -42,13 +58,19 @@
       </div>
       <div class="modal-info-under">
         <button class="styled-button" @click="tooggleModal = false">Cerrar</button>
-      </div>      
+      </div>
     </div>
 </div>
 
 
 <div class="button-container modal-info-under">
   <button class="styled-button" @click="togglePage(false)"><img src="@/assets/left.png" alt="Logo" style="width: 20px; height: 20px;">Anterior página</button>
+
+  <button @click="choosePag(1)">1</button>
+  <button @click="choosePag(2)">2</button>
+  <button @click="choosePag(3)">3</button>
+  <button @click="choosePag(4)">4</button>
+
   <button class="styled-button" @click="togglePage(true)">Siguiente página<img src="@/assets/right.png" alt="Logo" style="width: 20px; height: 20px;"></button>
 </div>
 
@@ -69,6 +91,8 @@ const pageSize = ref(20)
 const page = ref(0)
 const tooggleModal = ref(false)
 
+const nameDigimonSearch = ref('')
+
 // Cargar los datos cuando el componente se monta
 onMounted(() => {
   callDigiApiAllDigimons()
@@ -81,7 +105,13 @@ const togglePage = (increment) => {
     page.value -= 1;
   }
   callDigiApiAllDigimons();
-}
+};
+
+const choosePag = (numPage) => {
+  page.value = numPage;
+  callDigiApiAllDigimons();
+};
+
 
 
 // Ejemplo de funcion asyncrona
@@ -99,11 +129,19 @@ const callDigiApiOneDigimonDetail = async (id) => {
   digimonDetail.value = data
 }
 
+const callDigiApiOneDigimonDetailByName = async (name) => {
+  const response = await fetch(`https://digi-api.com/api/v1/digimon/${name}`)
+  const data = await response.json()
+
+  digimonDetail.value = data
+  tooggleModal.value = true
+}
+
 const showDigimon = (id) => {
   tooggleModal.value = true
   callDigiApiOneDigimonDetail(id)
 }
- 
+
 </script>
 
 
@@ -280,7 +318,7 @@ h4 {
 
     .modal-info-under{
       height:80px;
-      width: 100%; 
+      width: 100%;
       float:inline-end;
       align-items: center;
      /* background-color: #2980b9;*/
