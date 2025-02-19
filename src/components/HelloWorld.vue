@@ -29,8 +29,8 @@
     
     <div class="modal-info-left modal-text">
       <label class="sub-text">Nombre:</label><label> {{ digimonDetail.name }} </label><br>
-      <label class="sub-text">Nivel: </label><label>{{ digimonDetail.levels[0].level }} </label><br>
-      <label class="sub-text">Tipo: </label><label>{{ digimonDetail.types[0].type }} </label>
+      <label class="sub-text">Nivel: </label><label>{{ digimonDetail.levels[0]?.level }} </label><br>
+      <label class="sub-text">Tipo: </label><label>{{ digimonDetail.types[0]?.type }} </label>
     </div>
 
     <div class="modal-info-right modal-text">
