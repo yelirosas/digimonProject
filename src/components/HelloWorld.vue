@@ -90,6 +90,7 @@ const digimonDetail = ref({})
 const pageSize = ref(20)
 const page = ref(0)
 const tooggleModal = ref(false)
+const totalPagesDigimon = ref(0)  
 
 const nameDigimonSearch = ref('')
 
@@ -100,9 +101,9 @@ onMounted(() => {
 
 const togglePage = (increment) => {
   if (increment) {
-    page.value += 1;
+    page.value == totalPagesDigimon.value ? page.value = page.value : page.value += 1;
   } else {
-    page.value -= 1;
+    page.value > 0 ? page.value -= 1 : page.value = page.value ; 
   }
   callDigiApiAllDigimons();
 };
@@ -120,9 +121,10 @@ const callDigiApiAllDigimons = async () => {
   const data = await response.json()
 
   digimones.value = data
+  totalPagesDigimon.value = data.pageable.totalPages
 }
 
-const callDigiApiOneDigimonDetail = async (id) => {
+async function callDigiApiOneDigimonDetail(id) {
   const response = await fetch(`https://digi-api.com/api/v1/digimon/${id}`)
   const data = await response.json()
 
