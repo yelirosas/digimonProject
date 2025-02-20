@@ -64,14 +64,16 @@
 
 
 <div class="button-container modal-info-under">
-  <button class="styled-button" @click="togglePage(false)"><img src="@/assets/left.png" alt="Logo" style="width: 20px; height: 20px;">Anterior página</button>
 
-  <button @click="choosePag(1)">1</button>
-  <button @click="choosePag(2)">2</button>
-  <button @click="choosePag(3)">3</button>
-  <button @click="choosePag(4)">4</button>
+  <button v-if="page > 0" class="styled-button" @click="togglePage(false)">Anterior página
+  <img src="@/assets/left.png" alt="Logo" style="width: 20px; height: 20px;"></button>
+  
+  <button v-for="num in visiblePages" :key="num" @click="choosePag(num)" 
+  :class="{ active: num === page }">{{ num + 1 }}</button>
 
-  <button class="styled-button" @click="togglePage(true)">Siguiente página<img src="@/assets/right.png" alt="Logo" style="width: 20px; height: 20px;"></button>
+  <button v-if="page < totalPagesDigimon" class="styled-button" @click="togglePage(true)">Siguiente página
+  <img src="@/assets/right.png" alt="Logo" style="width: 20px; height: 20px;"></button>
+
 </div>
 
 <div class="container2">
@@ -83,14 +85,15 @@
 
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { computed,ref, onMounted } from 'vue'
 
 const digimones = ref([])
 const digimonDetail = ref({})
 const pageSize = ref(20)
 const page = ref(0)
 const tooggleModal = ref(false)
-const totalPagesDigimon = ref(0)  
+const totalPagesDigimon = ref(0) 
+const maxVisibleButtons = 4; // Máximo de botones de paginación visibles 
 
 const nameDigimonSearch = ref('')
 
@@ -101,9 +104,9 @@ onMounted(() => {
 
 const togglePage = (increment) => {
   if (increment) {
-    page.value == totalPagesDigimon.value ? page.value = page.value : page.value += 1;
+    page.value += 1;
   } else {
-    page.value > 0 ? page.value -= 1 : page.value = page.value ; 
+     page.value -= 1; 
   }
   callDigiApiAllDigimons();
 };
@@ -143,6 +146,19 @@ const showDigimon = (id) => {
   tooggleModal.value = true
   callDigiApiOneDigimonDetail(id)
 }
+
+// Cálculo de los botones visibles de paginación
+const visiblePages = computed(() => {
+  let start = Math.max(0, page.value - Math.floor(maxVisibleButtons / 2));
+  let end = Math.min(totalPagesDigimon.value, start + maxVisibleButtons);
+
+  // Ajustar si estamos al final para que siempre se muestren "maxVisibleButtons"
+  if (end - start < maxVisibleButtons) {
+    start = Math.max(0, end - maxVisibleButtons);
+  }
+
+  return Array.from({ length: end - start }, (_, i) => start + i);
+});
 
 </script>
 
