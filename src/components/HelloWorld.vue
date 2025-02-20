@@ -93,7 +93,7 @@ const pageSize = ref(20)
 const page = ref(0)
 const tooggleModal = ref(false)
 const totalPagesDigimon = ref(0) 
-const maxVisibleButtons = 4; // Máximo de botones de paginación visibles 
+const maxVisibleButtons = 5; // Máximo de botones de paginación visibles 
 
 const nameDigimonSearch = ref('')
 
@@ -148,8 +148,10 @@ const showDigimon = (id) => {
 }
 
 // Cálculo de los botones visibles de paginación
-const visiblePages = computed(() => {
-  let start = Math.max(0, page.value - Math.floor(maxVisibleButtons / 2));
+const visiblePages = computed(() => { //el computed es una funcion de vue que sirve para calcular y actualizar las dependencias autimaticamente cada que cambien sus dependendias
+   //En este caso, "visiblePages" se recalcula cada vez que cambia "page.value"
+
+  let start = Math.max(0, page.value - Math.floor(maxVisibleButtons / 2)); 
   let end = Math.min(totalPagesDigimon.value, start + maxVisibleButtons);
 
   // Ajustar si estamos al final para que siempre se muestren "maxVisibleButtons"
@@ -157,7 +159,9 @@ const visiblePages = computed(() => {
     start = Math.max(0, end - maxVisibleButtons);
   }
 
-  return Array.from({ length: end - start }, (_, i) => start + i);
+  return Array.from({ length: end - start }, (_, i) => start + i); //El _ podría ser "valor" pero como no se utiliza se pone _
+                                                                  // "i" es el indice que va desde el 0 hasta el numero de espacios que hay
+                                                                  // por ello se suma el indice por el valor del "start"
 });
 
 </script>
@@ -344,6 +348,11 @@ h4 {
 
     .sub-text{
       font-weight: bold;
+    }
+
+    .active {
+    background-color: blue;
+    color: white;
     }
 
 
