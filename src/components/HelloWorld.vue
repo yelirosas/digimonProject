@@ -50,6 +50,8 @@ const page = ref(0)
 const tooggleModal = ref(false)
 const tooggleModalPapa = ref(false)
 const totalPagesDigimon = ref(0)  
+const totalPagesDigimon = ref(0) 
+const maxVisibleButtons = 4; // Máximo de botones de paginación visibles 
 
 const nameDigimonSearch = ref('')
 
@@ -112,6 +114,20 @@ const showDigimon = (id) => {
   callDigiApiOneDigimonDetail(id)
 }
  
+
+// Cálculo de los botones visibles de paginación
+const visiblePages = computed(() => {
+  let start = Math.max(0, page.value - Math.floor(maxVisibleButtons / 2));
+  let end = Math.min(totalPagesDigimon.value, start + maxVisibleButtons);
+
+  // Ajustar si estamos al final para que siempre se muestren "maxVisibleButtons"
+  if (end - start < maxVisibleButtons) {
+    start = Math.max(0, end - maxVisibleButtons);
+  }
+
+  return Array.from({ length: end - start }, (_, i) => start + i);
+});
+
 </script>
 
 
@@ -231,5 +247,73 @@ h4 {
   max-width: 600px;
   width: 100%;
 }
+
+    /* Contenedor para centrar los botones */
+    .button-container {
+      width: 100%;             /* Asegura que el contenedor ocupa el 100% del ancho */
+      display: flex;
+      justify-content: center; /* Centra los elementos horizontalmente */
+      gap: 20px;               /* Espacio entre botones */
+      margin-top: 50px;        /* Espacio superior */
+    }
+
+    /* Estilo general para los botones */
+    .styled-button {
+      background-color: #3498db; /* Color de fondo */
+      border: none;
+      border-radius: 5px;        /* Bordes redondeados */
+      color: #fff;               /* Color del texto */
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    /* Efecto al pasar el cursor */
+    .styled-button:hover {
+      background-color: #2980b9;
+      transform: translateY(-2px);
+    }
+
+    /* Efecto al hacer clic */
+    .styled-button:active {
+      transform: translateY(0);
+    }
+
+    .modal-info-left{
+      height: auto;
+      width: 230px;
+      float: left;
+     /* background-color: #f00c0c;*/
+    }
+
+    .modal-text{
+      text-align: left;
+      font-size: 110%;
+      font-family: "Arial";
+      line-height: 200%;
+    }
+
+    .modal-info-right{
+      padding-bottom: 20px;
+      height:auto;
+      width: 300px;
+      float: right;
+     /* background-color: #2980b9;*/
+    }
+
+    .modal-info-under{
+      height:80px;
+      width: 100%;
+      float:inline-end;
+      align-items: center;
+     /* background-color: #2980b9;*/
+    }
+
+    .sub-text{
+      font-weight: bold;
+    }
+
+
 
 </style>
