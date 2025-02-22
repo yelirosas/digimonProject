@@ -21,19 +21,7 @@
     </div>
   </div>
 
-<<<<<<< Updated upstream
-
-<div class="modal-container" v-if="tooggleModal">
-  <div class="modal">
-    <h4>Modal</h4>
-    <label >Nombre: {{ digimonDetail.name }} </label>
-    <button @click="tooggleModal = false">Cerrar</button>
-  </div>
-</div>
-
-=======
   <ModalComponent :tooggleModalHijo="tooggleModalPapa" :oneDigimonInfo="digimonDetail" @closeModal="fnEjemplo" @otroEmit="fnEjemplo2" />
->>>>>>> Stashed changes
 
 </template>
 
@@ -59,26 +47,16 @@ const digimones = ref([])
 const digimonDetail = ref({})
 const pageSize = ref(20)
 const page = ref(0)
-<<<<<<< Updated upstream
-const tooggleModal = ref(false)
-=======
 const tooggleModalPapa = ref(false)
 const totalPagesDigimon = ref(0)  
 
 const nameDigimonSearch = ref('')
->>>>>>> Stashed changes
 
 // Cargar los datos cuando el componente se monta
 onMounted(() => {
   callDigiApiAllDigimons()
 });
 
-<<<<<<< Updated upstream
-const toogglePage = () => {
-  page.value += 1
-  callDigiApiAllDigimons()
-}
-=======
 const togglePage = (increment) => {
   if (increment) {
     page.value == totalPagesDigimon.value ? page.value = page.value : page.value += 1;
@@ -94,7 +72,7 @@ const choosePag = (numPage) => {
 };
 
 const fnEjemplo = () => {
-  console.log('Hola soy el hijo que te dijo que ejecutaras esta funcion')
+  tooggleModalPapa.value = false
 }
 
 const fnEjemplo2 = () => {
@@ -102,7 +80,6 @@ const fnEjemplo2 = () => {
 }
 
 
->>>>>>> Stashed changes
 
 // Ejemplo de funcion asyncrona
 const callDigiApiAllDigimons = async () => {
@@ -120,8 +97,6 @@ const callDigiApiOneDigimonDetail = async (id) => {
   digimonDetail.value = data
 }
 
-<<<<<<< Updated upstream
-=======
 const callDigiApiOneDigimonDetailByName = async (name) => {
   const response = await fetch(`https://digi-api.com/api/v1/digimon/${name}`)
   const data = await response.json()
@@ -130,7 +105,6 @@ const callDigiApiOneDigimonDetailByName = async (name) => {
   tooggleModalPapa.value = true
 }
 
->>>>>>> Stashed changes
 const showDigimon = (id) => {
   tooggleModalPapa.value = true
   callDigiApiOneDigimonDetail(id)
