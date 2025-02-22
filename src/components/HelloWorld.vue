@@ -21,6 +21,7 @@
     </div>
   </div>
 
+<<<<<<< Updated upstream
 
 <div class="modal-container" v-if="tooggleModal">
   <div class="modal">
@@ -30,6 +31,9 @@
   </div>
 </div>
 
+=======
+  <ModalComponent :tooggleModalHijo="tooggleModalPapa" :oneDigimonInfo="digimonDetail" @closeModal="fnEjemplo" @otroEmit="fnEjemplo2" />
+>>>>>>> Stashed changes
 
 </template>
 
@@ -49,22 +53,56 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import ModalComponent from './ModalComponent.vue'
 
 const digimones = ref([])
 const digimonDetail = ref({})
 const pageSize = ref(20)
 const page = ref(0)
+<<<<<<< Updated upstream
 const tooggleModal = ref(false)
+=======
+const tooggleModalPapa = ref(false)
+const totalPagesDigimon = ref(0)  
+
+const nameDigimonSearch = ref('')
+>>>>>>> Stashed changes
 
 // Cargar los datos cuando el componente se monta
 onMounted(() => {
   callDigiApiAllDigimons()
 });
 
+<<<<<<< Updated upstream
 const toogglePage = () => {
   page.value += 1
   callDigiApiAllDigimons()
 }
+=======
+const togglePage = (increment) => {
+  if (increment) {
+    page.value == totalPagesDigimon.value ? page.value = page.value : page.value += 1;
+  } else {
+    page.value > 0 ? page.value -= 1 : page.value = page.value ; 
+  }
+  callDigiApiAllDigimons();
+};
+
+const choosePag = (numPage) => {
+  page.value = numPage;
+  callDigiApiAllDigimons();
+};
+
+const fnEjemplo = () => {
+  console.log('Hola soy el hijo que te dijo que ejecutaras esta funcion')
+}
+
+const fnEjemplo2 = () => {
+  console.log('Funcion de ejemplo 2')
+}
+
+
+>>>>>>> Stashed changes
 
 // Ejemplo de funcion asyncrona
 const callDigiApiAllDigimons = async () => {
@@ -82,8 +120,19 @@ const callDigiApiOneDigimonDetail = async (id) => {
   digimonDetail.value = data
 }
 
+<<<<<<< Updated upstream
+=======
+const callDigiApiOneDigimonDetailByName = async (name) => {
+  const response = await fetch(`https://digi-api.com/api/v1/digimon/${name}`)
+  const data = await response.json()
+
+  digimonDetail.value = data
+  tooggleModalPapa.value = true
+}
+
+>>>>>>> Stashed changes
 const showDigimon = (id) => {
-  tooggleModal.value = true
+  tooggleModalPapa.value = true
   callDigiApiOneDigimonDetail(id)
 }
  
