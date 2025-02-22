@@ -22,49 +22,9 @@
     </div>
   </div>
 
-
-<div class="modal-container" v-if="tooggleModal">
-  <div class="modal">
-    <h4>Modal</h4>
-
-    <img :src="digimonDetail.images[0].href"  alt="Imagen de Digimon"><br>
-
-    <div class="modal-info-left modal-text">
-      <label class="sub-text">Nombre:</label><label> {{ digimonDetail.name }} </label><br>
-      <!-- <label class="sub-text">Nivel: </label><label>{{ digimonDetail.levels.length > 0 ? digimonDetail.levels[0].level : 'N/A' }} </label><br> -->
-
-      <label class="sub-text">Nivel: </label>
-
-      <div v-for="digimonOne in digimonDetail.levels">
-        <label>{{digimonOne.level }} </label>
-      </div>
-
-      <!-- <label>{{digimonDetail.levels.length == 0 ? 'N/A' : '' }} </label> <br>  -->
-
-      <div v-if="digimonDetail.levels.length == 0">
-        'N/A'
-      </div>
-
-
-      <label class="sub-text">Tipo: </label><label>{{ digimonDetail.types[0].type }} </label>
-    </div>
-
-    <div class="modal-info-right modal-text">
-      <label class="sub-text">Skills:</label>
-      <div v-for="digimonOne in digimonDetail.skills">
-        <label style="font-family: sans-serif;"> <ul><li>{{digimonOne.skill }} </li></ul></label>
-        </div>
-
-      </div>
-      <div class="modal-info-under">
-        <button class="styled-button" @click="tooggleModal = false">Cerrar</button>
-      </div>
-    </div>
-</div>
-
+  <ModalComponent :stateModal="tooggleModal" :digimonDetail="digimonDetail" @closeModal="closeModalFn" />
 
 <div class="button-container modal-info-under">
-
   <button v-if="page > 0" class="styled-button" @click="togglePage(false)">Anterior página
   <img src="@/assets/left.png" alt="Logo" style="width: 20px; height: 20px;"></button>
   
@@ -73,19 +33,13 @@
 
   <button v-if="page < totalPagesDigimon" class="styled-button" @click="togglePage(true)">Siguiente página
   <img src="@/assets/right.png" alt="Logo" style="width: 20px; height: 20px;"></button>
-
-</div>
-
-<div class="container2">
-
 </div>
 
 </template>
 
-
-
 <script setup>
 import { computed,ref, onMounted } from 'vue'
+import ModalComponent from './ModalComponent.vue'
 
 const digimones = ref([])
 const digimonDetail = ref({})
@@ -104,9 +58,9 @@ onMounted(() => {
 
 const togglePage = (increment) => {
   if (increment) {
-    page.value += 1;
+    page.value == totalPagesDigimon.value ? page.value = page.value : page.value += 1;
   } else {
-     page.value -= 1; 
+    page.value > 0 ? page.value -= 1 : page.value = page.value ; 
   }
   callDigiApiAllDigimons();
 };
@@ -116,7 +70,9 @@ const choosePag = (numPage) => {
   callDigiApiAllDigimons();
 };
 
-
+const closeModalFn = () => {
+  tooggleModal.value = false;
+};
 
 // Ejemplo de funcion asyncrona
 const callDigiApiAllDigimons = async () => {
