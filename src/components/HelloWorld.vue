@@ -7,11 +7,15 @@
 <input type="search" v-model="nameDigimonSearch" placeholder="Buscar Digimon por nombre" >
 <button @click="callDigiApiOneDigimonDetailByName(nameDigimonSearch)">Buscar</button>
 
-  <div class="container">
+<div class="container">
+  <div class="card-container">
+    <div v-for="digimon in digimones.content" :key="digimon.name" class="card">
+      
+      <CardComponent :oneDigimonInfo="digimon" @showDigimonEmit="showDigimon(digimon.id)" />
     
-    <CardComponent :oneDigimonInfo="digimones" />
-  
+    </div>
   </div>
+</div>
 
   <ModalComponent :stateModal="tooggleModal" :digimonDetail="digimonDetail" @closeModal="closeModalFn" />
 
