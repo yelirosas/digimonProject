@@ -8,18 +8,9 @@
 <button @click="callDigiApiOneDigimonDetailByName(nameDigimonSearch)">Buscar</button>
 
   <div class="container">
-    <!-- Contenedor de tarjetas con Grid -->
-    <div class="card-container">
-      <div v-for="digimon in digimones.content" :key="digimon.name" class="card">
-
-        <div @click="showDigimon(digimon.id)">
-          <img :src="digimon.image" alt="Imagen de Digimon">
-          <h2><img src="@/assets/digivice.webp" alt="Logo" style="width: 20px; height: 20px;"> {{ digimon.name }}</h2>
-        </div>
-
-      </div>
-
-    </div>
+    
+    <CardComponent :oneDigimonInfo="digimones" />
+  
   </div>
 
   <ModalComponent :stateModal="tooggleModal" :digimonDetail="digimonDetail" @closeModal="closeModalFn" />
@@ -40,13 +31,15 @@
 <script setup>
 import { computed,ref, onMounted } from 'vue'
 import ModalComponent from './ModalComponent.vue'
+import CardComponent from './CardComponent.vue'
 
 const digimones = ref([])
 const digimonDetail = ref({})
 const pageSize = ref(20)
 const page = ref(0)
 const tooggleModal = ref(false)
-const totalPagesDigimon = ref(0) 
+const tooggleModalPapa = ref(false)
+const totalPagesDigimon = ref(0)  
 const maxVisibleButtons = 4; // Máximo de botones de paginación visibles 
 
 const nameDigimonSearch = ref('')
@@ -117,7 +110,6 @@ const visiblePages = computed(() => {
 });
 
 </script>
-
 
 
 <style>
